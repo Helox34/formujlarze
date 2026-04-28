@@ -1,0 +1,9 @@
+zrobisz mi zadanie 
+
+ZADANIE_Formularz podróży.pdf
+ na podstawie wyglądu mojej strony pliki mojej strony masz 
+
+index.css
+
+index.html
+ chciałbym aby praca zawierała pliki php css i html pliki mają być podzielone na osobne rozszezrnia pliki mają sie nazywać formularz.html itd\
