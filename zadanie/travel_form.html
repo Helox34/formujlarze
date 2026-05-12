@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pl-PL">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formularz podróży – BPiwowarczyk</title>
+    <meta name="description" content="Formularz zgłoszeniowy podróży – wypełnij dane i zarezerwuj swój wyjazd." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="travel_form.css" />
+    <!-- Blokowanie flasha motywu -->
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('theme');
+                if (!t && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) t = 'dark';
+                if (t === 'dark') document.documentElement.classList.add('dark');
+            } catch (e) { }
+        })();
+    </script>
+</head>
+
+<body>
+
+    <!-- Animowane tło -->
+    <div class="bg-blobs" aria-hidden="true">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- ── Główna zawartość ── -->
+    <div class="page-wrapper">
+        <div class="container">
+
+            <!-- Nagłówek strony -->
+            <div class="page-header">
+                <h1>Formularz zgłoszeniowy podróży</h1>
+                <p>Uzupełnij wszystkie pola. Błędne dane zostaną wyróżnione z podaniem przyczyny.</p>
+            </div>
+
+            <!-- ── Formularz ── -->
+            <form id="travelForm" class="travel-form" novalidate autocomplete="on">
+
+                <!-- ─── 1. Dane osobowe ─── -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <div class="section-icon">👤</div>
+                        <h2 class="form-section-title">Dane osobowe</h2>
+                    </div>
+                    <div class="form-grid">
+
+                        <div class="form-row">
+                            <label for="firstName">Imię <span class="req">*</span></label>
+                            <input type="text" id="firstName" name="firstName" autocomplete="given-name"
+                                placeholder="Jan" required />
+                            <span class="error-msg" id="err-firstName"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="lastName">Nazwisko <span class="req">*</span></label>
+                            <input type="text" id="lastName" name="lastName" autocomplete="family-name"
+                                placeholder="Kowalski" required />
+                            <span class="error-msg" id="err-lastName"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="birthDate">Data urodzenia <span class="req">*</span></label>
+                            <input type="date" id="birthDate" name="birthDate" autocomplete="bday" required />
+                            <span class="error-msg" id="err-birthDate"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="nationality">Obywatelstwo <span class="req">*</span></label>
+                            <input type="text" id="nationality" name="nationality" placeholder="Polska" required />
+                            <span class="error-msg" id="err-nationality"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="pesel">PESEL <span class="req">*</span></label>
+                            <input type="text" id="pesel" name="pesel" placeholder="12345678901" maxlength="11"
+                                required />
+                            <span class="error-msg" id="err-pesel"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="phone">Telefon kontaktowy <span class="req">*</span></label>
+                            <input type="tel" id="phone" name="phone" autocomplete="tel" placeholder="+48 123 456 789"
+                                required />
+                            <span class="error-msg" id="err-phone"></span>
+                        </div>
+
+                        <div class="form-row col-full">
+                            <label for="email">Adres e‑mail <span class="req">*</span></label>
+                            <input type="email" id="email" name="email" autocomplete="email"
+                                placeholder="jan@przyklad.pl" required />
+                            <span class="error-msg" id="err-email"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr class="section-divider" />
+
+                <!-- ─── 2. Informacje o podróży ─── -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <div class="section-icon">🌍</div>
+                        <h2 class="form-section-title">Informacje o podróży</h2>
+                    </div>
+                    <div class="form-grid">
+
+                        <div class="form-row">
+                            <label for="country">Kraj / region docelowy <span class="req">*</span></label>
+                            <input type="text" id="country" name="country" placeholder="Włochy" required />
+                            <span class="error-msg" id="err-country"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="city">Miejscowość <span class="req">*</span></label>
+                            <input type="text" id="city" name="city" placeholder="Rzym" required />
+                            <span class="error-msg" id="err-city"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="startDate">Data rozpoczęcia podróży <span class="req">*</span></label>
+                            <input type="date" id="startDate" name="startDate" required />
+                            <span class="error-msg" id="err-startDate"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="endDate">Data zakończenia podróży <span class="req">*</span></label>
+                            <input type="date" id="endDate" name="endDate" required />
+                            <span class="error-msg" id="err-endDate"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="stayLength">Liczba dni pobytu <span class="req">*</span></label>
+                            <select id="stayLength" name="stayLength" required>
+                                <option value="">— wybierz —</option>
+                                <option value="7">7 dni</option>
+                                <option value="10">10 dni</option>
+                                <option value="14">14 dni</option>
+                            </select>
+                            <span class="error-msg" id="err-stayLength"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="purpose">Cel podróży <span class="req">*</span></label>
+                            <select id="purpose" name="purpose" required>
+                                <option value="">— wybierz —</option>
+                                <option value="wypoczynek">Wypoczynek</option>
+                                <option value="zwiedzanie">Zwiedzanie</option>
+                                <option value="biznes">Biznes</option>
+                                <option value="inny">Inny</option>
+                            </select>
+                            <span class="error-msg" id="err-purpose"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr class="section-divider" />
+
+                <!-- ─── 3. Zakwaterowanie ─── -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <div class="section-icon">🏨</div>
+                        <h2 class="form-section-title">Zakwaterowanie</h2>
+                    </div>
+                    <div class="form-grid">
+
+                        <div class="form-row">
+                            <label for="accommodationType">Rodzaj zakwaterowania <span class="req">*</span></label>
+                            <select id="accommodationType" name="accommodationType" required>
+                                <option value="">— wybierz —</option>
+                                <option value="hotel">Hotel</option>
+                                <option value="apartament">Apartament</option>
+                                <option value="pensjonat">Pensjonat</option>
+                                <option value="hostel">Hostel</option>
+                                <option value="inny">Inny</option>
+                            </select>
+                            <span class="error-msg" id="err-accommodationType"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="accommodationRating">Standard obiektu (1–5 ☆) <span class="req">*</span></label>
+                            <input type="number" id="accommodationRating" name="accommodationRating" min="1" max="5"
+                                placeholder="np. 4" required />
+                            <span class="error-msg" id="err-accommodationRating"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="peopleInRoom">Liczba osób w pokoju <span class="req">*</span></label>
+                            <input type="number" id="peopleInRoom" name="peopleInRoom" min="1" max="10"
+                                placeholder="np. 2" required />
+                            <span class="error-msg" id="err-peopleInRoom"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="roomPreference">Preferencje pokoju <span class="req">*</span></label>
+                            <select id="roomPreference" name="roomPreference" required>
+                                <option value="">— wybierz —</option>
+                                <option value="jednoosobowy">Jednoosobowy</option>
+                                <option value="dwuosobowy">Dwuosobowy</option>
+                                <option value="rodzinny">Rodzinny</option>
+                            </select>
+                            <span class="error-msg" id="err-roomPreference"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr class="section-divider" />
+
+                <!-- ─── 4. Transport ─── -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <div class="section-icon">🚀</div>
+                        <h2 class="form-section-title">Transport</h2>
+                    </div>
+                    <div class="form-grid">
+
+                        <div class="form-row">
+                            <label for="transportMode">Środek transportu <span class="req">*</span></label>
+                            <select id="transportMode" name="transportMode" required>
+                                <option value="">— wybierz —</option>
+                                <option value="samolot">✈ Samolot</option>
+                                <option value="autokar">🚌 Autokar</option>
+                                <option value="wlasny">🚗 Własny</option>
+                                <option value="pociag">🚆 Pociąg</option>
+                            </select>
+                            <span class="error-msg" id="err-transportMode"></span>
+                        </div>
+
+                        <div class="form-row"></div><!-- spacer -->
+
+                        <div class="form-row">
+                            <label for="departurePlace">Miejsce wyjazdu <span class="req">*</span></label>
+                            <input type="text" id="departurePlace" name="departurePlace" placeholder="np. Kraków"
+                                required />
+                            <span class="error-msg" id="err-departurePlace"></span>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="returnPlace">Miejsce powrotu <span class="req">*</span></label>
+                            <input type="text" id="returnPlace" name="returnPlace" placeholder="np. Kraków" required />
+                            <span class="error-msg" id="err-returnPlace"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr class="section-divider" />
+
+                <!-- ─── 5. Preferencje i potrzeby ─── -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <div class="section-icon">🥗</div>
+                        <h2 class="form-section-title">Preferencje i potrzeby</h2>
+                    </div>
+                    <div class="form-grid">
+
+                        <div class="form-row">
+                            <label for="diet">Dieta</label>
+                            <select id="diet" name="diet">
+                                <option value="">Brak (standardowa)</option>
+                                <option value="wegetarianska">Wegetariańska</option>
+                                <option value="weganska">Wegańska</option>
+                                <option value="bezglutenowa">Bezglutenowa</option>
+                                <option value="halal">Halal</option>
+                                <option value="inne">Inne</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="language">Język komunikacji <span class="req">*</span></label>
+                            <input type="text" id="language" name="language" placeholder="np. Polski" required />
+                            <span class="error-msg" id="err-language"></span>
+                        </div>
+
+                        <div class="form-row col-full">
+                            <label for="specialNeeds">Potrzeby specjalne</label>
+                            <textarea id="specialNeeds" name="specialNeeds"
+                                placeholder="np. niepełnosprawność, opieka medyczna, alergie…"></textarea>
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr class="section-divider" />
+
+                <!-- ─── 6. Ubezpieczenie i zgody ─── -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <div class="section-icon">🛡️</div>
+                        <h2 class="form-section-title">Ubezpieczenie i zgody</h2>
+                    </div>
+                    <div class="form-grid">
+
+                        <div class="form-row col-full">
+                            <div class="checkbox-row">
+                                <input type="checkbox" id="insurance" name="insurance" />
+                                <label for="insurance">
+                                    Posiadam ubezpieczenie turystyczne na czas podróży
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-row col-full">
+                            <div class="checkbox-row">
+                                <input type="checkbox" id="privacy" name="privacy" required />
+                                <label for="privacy">
+                                    Wyrażam zgodę na przetwarzanie danych osobowych zgodnie z
+                                    <a href="#" target="_blank" rel="noopener">Polityką Prywatności (RODO)</a>
+                                    <span class="req">*</span>
+                                </label>
+                            </div>
+                            <span class="error-msg" id="err-privacy"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <hr class="section-divider" />
+
+                <!-- ─── 7. Dodatkowe informacje ─── -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <div class="section-icon">💬</div>
+                        <h2 class="form-section-title">Dodatkowe informacje</h2>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-row col-full">
+                            <label for="remarks">Uwagi / komentarze</label>
+                            <textarea id="remarks" name="remarks"
+                                placeholder="Tutaj wpisz wszelkie dodatkowe uwagi lub pytania…"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ─── Przycisk submit ─── -->
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    ✈ Wyślij formularz zgłoszeniowy
+                </button>
+
+                <p class="form-status" id="formStatus" aria-live="polite" role="alert"></p>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+        © 2025 <a href="../index.html">BPiwowarczyk</a> · Wszelkie prawa zastrzeżone
+    </footer>
+
+    <!-- ── JavaScript ── -->
+    <script>
+        (function () {
+            'use strict';
+
+            /* ── Przełącznik motywu ── */
+            const btn = document.getElementById('themeBtn');
+            const html = document.documentElement;
+
+            function applyTheme(dark) {
+                html.classList.toggle('dark', dark);
+                btn.setAttribute('aria-checked', String(dark));
+                try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) { }
+            }
+
+            btn.addEventListener('click', () => applyTheme(!html.classList.contains('dark')));
+            applyTheme(html.classList.contains('dark')); // sync aria-checked
+
+            /* ── Walidacja ── */
+            const form = document.getElementById('travelForm');
+            const status = document.getElementById('formStatus');
+
+            function showErr(id, msg) {
+                const el = document.getElementById('err-' + id);
+                const inp = document.getElementById(id) || form.querySelector('[name="' + id + '"]');
+                if (el) { el.textContent = '⚠ ' + msg; el.classList.add('visible'); }
+                if (inp) { inp.classList.add('input-error'); inp.classList.remove('input-ok'); }
+            }
+
+            function clearErr(id) {
+                const el = document.getElementById('err-' + id);
+                const inp = document.getElementById(id) || form.querySelector('[name="' + id + '"]');
+                if (el) { el.textContent = ''; el.classList.remove('visible'); }
+                if (inp) { inp.classList.remove('input-error'); inp.classList.add('input-ok'); }
+            }
+
+            function clearAll() {
+                form.querySelectorAll('.error-msg').forEach(e => { e.textContent = ''; e.classList.remove('visible'); });
+                form.querySelectorAll('.input-error,.input-ok').forEach(e => { e.classList.remove('input-error', 'input-ok'); });
+                status.className = 'form-status';
+                status.textContent = '';
+            }
+
+            function peselValid(p) {
+                if (!/^\d{11}$/.test(p)) return false;
+                const w = [1, 3, 7, 9, 1, 3, 7, 9, 1, 3];
+                let s = 0;
+                for (let i = 0; i < 10; i++) s += w[i] * parseInt(p[i]);
+                return (10 - (s % 10)) % 10 === parseInt(p[10]);
+            }
+
+            function validate() {
+                let ok = true;
+                const today = new Date(); today.setHours(0, 0, 0, 0);
+
+                /* Imię */
+                const firstName = form.firstName.value.trim();
+                if (!firstName) { showErr('firstName', 'Imię jest wymagane.'); ok = false; }
+                else if (firstName.length < 2) { showErr('firstName', 'Imię musi mieć min. 2 znaki.'); ok = false; }
+                else clearErr('firstName');
+
+                /* Nazwisko */
+                const lastName = form.lastName.value.trim();
+                if (!lastName) { showErr('lastName', 'Nazwisko jest wymagane.'); ok = false; }
+                else if (lastName.length < 2) { showErr('lastName', 'Nazwisko musi mieć min. 2 znaki.'); ok = false; }
+                else clearErr('lastName');
+
+                /* Data urodzenia */
+                const birthVal = form.birthDate.value;
+                if (!birthVal) { showErr('birthDate', 'Data urodzenia jest wymagana.'); ok = false; }
+                else {
+                    const birth = new Date(birthVal);
+                    if (birth >= today) { showErr('birthDate', 'Data urodzenia musi być w przeszłości.'); ok = false; }
+                    else clearErr('birthDate');
+                }
+
+                /* Obywatelstwo */
+                const nat = form.nationality.value.trim();
+                if (!nat) { showErr('nationality', 'Obywatelstwo jest wymagane.'); ok = false; }
+                else clearErr('nationality');
+
+                /* PESEL */
+                const pesel = form.pesel.value.trim();
+                if (!pesel) { showErr('pesel', 'PESEL jest wymagany.'); ok = false; }
+                else if (!/^\d{11}$/.test(pesel)) { showErr('pesel', 'PESEL musi mieć dokładnie 11 cyfr.'); ok = false; }
+                else if (!peselValid(pesel)) { showErr('pesel', 'PESEL jest niepoprawny (błędna suma kontrolna).'); ok = false; }
+                else clearErr('pesel');
+
+                /* Telefon */
+                const phone = form.phone.value.replace(/\s/g, '');
+                if (!phone) { showErr('phone', 'Telefon jest wymagany.'); ok = false; }
+                else if (!/^(\+?\d{9,15})$/.test(phone)) { showErr('phone', 'Podaj poprawny numer telefonu (9–15 cyfr).'); ok = false; }
+                else clearErr('phone');
+
+                /* Email */
+                const email = form.email.value.trim();
+                if (!email) { showErr('email', 'Adres e‑mail jest wymagany.'); ok = false; }
+                else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { showErr('email', 'Podaj poprawny adres e‑mail.'); ok = false; }
+                else clearErr('email');
+
+                /* Kraj */
+                const country = form.country.value.trim();
+                if (!country) { showErr('country', 'Kraj docelowy jest wymagany.'); ok = false; }
+                else clearErr('country');
+
+                /* Miejscowość */
+                const city = form.city.value.trim();
+                if (!city) { showErr('city', 'Miejscowość jest wymagana.'); ok = false; }
+                else clearErr('city');
+
+                /* Daty podróży */
+                const startVal = form.startDate.value;
+                const endVal = form.endDate.value;
+                if (!startVal) { showErr('startDate', 'Data rozpoczęcia jest wymagana.'); ok = false; }
+                else {
+                    const start = new Date(startVal);
+                    if (start < today) { showErr('startDate', 'Data rozpoczęcia nie może być w przeszłości.'); ok = false; }
+                    else clearErr('startDate');
+                }
+                if (!endVal) { showErr('endDate', 'Data zakończenia jest wymagana.'); ok = false; }
+                else {
+                    const end = new Date(endVal);
+                    if (startVal && end <= new Date(startVal)) {
+                        showErr('endDate', 'Data zakończenia musi być późniejsza niż data rozpoczęcia.'); ok = false;
+                    } else clearErr('endDate');
+                }
+
+                /* Liczba dni */
+                if (!form.stayLength.value) { showErr('stayLength', 'Wybierz liczbę dni pobytu.'); ok = false; }
+                else clearErr('stayLength');
+
+                /* Cel podróży */
+                if (!form.purpose.value) { showErr('purpose', 'Wybierz cel podróży.'); ok = false; }
+                else clearErr('purpose');
+
+                /* Zakwaterowanie */
+                if (!form.accommodationType.value) { showErr('accommodationType', 'Wybierz rodzaj zakwaterowania.'); ok = false; }
+                else clearErr('accommodationType');
+
+                const rating = parseInt(form.accommodationRating.value);
+                if (!form.accommodationRating.value) { showErr('accommodationRating', 'Standard obiektu jest wymagany.'); ok = false; }
+                else if (rating < 1 || rating > 5) { showErr('accommodationRating', 'Standard musi wynosić od 1 do 5.'); ok = false; }
+                else clearErr('accommodationRating');
+
+                const people = parseInt(form.peopleInRoom.value);
+                if (!form.peopleInRoom.value) { showErr('peopleInRoom', 'Podaj liczbę osób w pokoju.'); ok = false; }
+                else if (people < 1) { showErr('peopleInRoom', 'Minimalna liczba osób to 1.'); ok = false; }
+                else clearErr('peopleInRoom');
+
+                if (!form.roomPreference.value) { showErr('roomPreference', 'Wybierz preferencje pokoju.'); ok = false; }
+                else clearErr('roomPreference');
+
+                /* Transport */
+                if (!form.transportMode.value) { showErr('transportMode', 'Wybierz środek transportu.'); ok = false; }
+                else clearErr('transportMode');
+
+                if (!form.departurePlace.value.trim()) { showErr('departurePlace', 'Miejsce wyjazdu jest wymagane.'); ok = false; }
+                else clearErr('departurePlace');
+
+                if (!form.returnPlace.value.trim()) { showErr('returnPlace', 'Miejsce powrotu jest wymagane.'); ok = false; }
+                else clearErr('returnPlace');
+
+                /* Język */
+                if (!form.language.value.trim()) { showErr('language', 'Język komunikacji jest wymagany.'); ok = false; }
+                else clearErr('language');
+
+                /* Zgoda RODO */
+                if (!form.privacy.checked) { showErr('privacy', 'Zgoda na przetwarzanie danych jest wymagana.'); ok = false; }
+                else clearErr('privacy');
+
+                return ok;
+            }
+
+            /* Live-walidacja pojedynczego pola po jego edycji */
+            form.addEventListener('input', function (e) {
+                const id = e.target.id;
+                if (!id) return;
+                // Szybka re-walidacja: wywołaj full validate ale pokaż tylko bieżące pole
+                // (Prościej: usuń błąd gdy pole ma wartość, pełna walidacja przy submit)
+                const el = form[e.target.name];
+                if (!el) return;
+                if (e.target.value.trim() || e.target.checked) {
+                    const errEl = document.getElementById('err-' + id);
+                    if (errEl && errEl.classList.contains('visible')) {
+                        errEl.classList.remove('visible');
+                        errEl.textContent = '';
+                        e.target.classList.remove('input-error');
+                    }
+                }
+            });
+
+            /* Obsługa submit */
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                clearAll();
+                if (validate()) {
+                    status.className = 'form-status success';
+                    status.textContent = '✅ Formularz został poprawnie wypełniony i zgłoszony! Dziękujemy.';
+                    status.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    form.reset();
+                    form.querySelectorAll('.input-ok').forEach(el => el.classList.remove('input-ok'));
+                } else {
+                    status.className = 'form-status error-status';
+                    status.textContent = '⚠ Proszę poprawić zaznaczone pola przed wysłaniem formularza.';
+                    const firstErr = form.querySelector('.input-error');
+                    if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            });
+        })();
+    </script>
+</body>
+
+</html>
