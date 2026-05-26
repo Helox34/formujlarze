@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet" />
     <link rel="stylesheet" href="travel_form.css" />
-    <!-- Blokowanie flasha motywu -->
     <script>
         (function () {
             try {
@@ -23,27 +22,22 @@
 
 <body>
 
-    <!-- Animowane tło -->
     <div class="bg-blobs" aria-hidden="true">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
         <div class="blob blob-3"></div>
     </div>
 
-    <!-- ── Główna zawartość ── -->
     <div class="page-wrapper">
         <div class="container">
 
-            <!-- Nagłówek strony -->
             <div class="page-header">
                 <h1>Formularz zgłoszeniowy podróży</h1>
                 <p>Uzupełnij wszystkie pola. Błędne dane zostaną wyróżnione z podaniem przyczyny.</p>
             </div>
 
-            <!-- ── Formularz ── -->
             <form id="travelForm" class="travel-form" novalidate autocomplete="on">
 
-                <!-- ─── 1. Dane osobowe ─── -->
                 <div class="form-section">
                     <div class="form-section-header">
                         <div class="section-icon">👤</div>
@@ -103,7 +97,6 @@
 
                 <hr class="section-divider" />
 
-                <!-- ─── 2. Informacje o podróży ─── -->
                 <div class="form-section">
                     <div class="form-section-header">
                         <div class="section-icon">🌍</div>
@@ -163,7 +156,6 @@
 
                 <hr class="section-divider" />
 
-                <!-- ─── 3. Zakwaterowanie ─── -->
                 <div class="form-section">
                     <div class="form-section-header">
                         <div class="section-icon">🏨</div>
@@ -214,7 +206,6 @@
 
                 <hr class="section-divider" />
 
-                <!-- ─── 4. Transport ─── -->
                 <div class="form-section">
                     <div class="form-section-header">
                         <div class="section-icon">🚀</div>
@@ -234,7 +225,7 @@
                             <span class="error-msg" id="err-transportMode"></span>
                         </div>
 
-                        <div class="form-row"></div><!-- spacer -->
+                        <div class="form-row"></div>
 
                         <div class="form-row">
                             <label for="departurePlace">Miejsce wyjazdu <span class="req">*</span></label>
@@ -254,7 +245,6 @@
 
                 <hr class="section-divider" />
 
-                <!-- ─── 5. Preferencje i potrzeby ─── -->
                 <div class="form-section">
                     <div class="form-section-header">
                         <div class="section-icon">🥗</div>
@@ -291,7 +281,6 @@
 
                 <hr class="section-divider" />
 
-                <!-- ─── 6. Ubezpieczenie i zgody ─── -->
                 <div class="form-section">
                     <div class="form-section-header">
                         <div class="section-icon">🛡️</div>
@@ -325,7 +314,6 @@
 
                 <hr class="section-divider" />
 
-                <!-- ─── 7. Dodatkowe informacje ─── -->
                 <div class="form-section">
                     <div class="form-section-header">
                         <div class="section-icon">💬</div>
@@ -340,7 +328,6 @@
                     </div>
                 </div>
 
-                <!-- ─── Przycisk submit ─── -->
                 <button type="submit" class="btn-submit" id="submitBtn">
                     ✈ Wyślij formularz zgłoszeniowy
                 </button>
@@ -351,17 +338,13 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="page-footer">
         © 2025 <a href="../index.html">BPiwowarczyk</a> · Wszelkie prawa zastrzeżone
     </footer>
 
-    <!-- ── JavaScript ── -->
     <script>
         (function () {
             'use strict';
-
-            /* ── Przełącznik motywu ── */
             const btn = document.getElementById('themeBtn');
             const html = document.documentElement;
 
@@ -372,9 +355,7 @@
             }
 
             btn.addEventListener('click', () => applyTheme(!html.classList.contains('dark')));
-            applyTheme(html.classList.contains('dark')); // sync aria-checked
-
-            /* ── Walidacja ── */
+            applyTheme(html.classList.contains('dark'));
             const form = document.getElementById('travelForm');
             const status = document.getElementById('formStatus');
 
@@ -410,20 +391,14 @@
             function validate() {
                 let ok = true;
                 const today = new Date(); today.setHours(0, 0, 0, 0);
-
-                /* Imię */
                 const firstName = form.firstName.value.trim();
                 if (!firstName) { showErr('firstName', 'Imię jest wymagane.'); ok = false; }
                 else if (firstName.length < 2) { showErr('firstName', 'Imię musi mieć min. 2 znaki.'); ok = false; }
                 else clearErr('firstName');
-
-                /* Nazwisko */
                 const lastName = form.lastName.value.trim();
                 if (!lastName) { showErr('lastName', 'Nazwisko jest wymagane.'); ok = false; }
                 else if (lastName.length < 2) { showErr('lastName', 'Nazwisko musi mieć min. 2 znaki.'); ok = false; }
                 else clearErr('lastName');
-
-                /* Data urodzenia */
                 const birthVal = form.birthDate.value;
                 if (!birthVal) { showErr('birthDate', 'Data urodzenia jest wymagana.'); ok = false; }
                 else {
@@ -431,42 +406,28 @@
                     if (birth >= today) { showErr('birthDate', 'Data urodzenia musi być w przeszłości.'); ok = false; }
                     else clearErr('birthDate');
                 }
-
-                /* Obywatelstwo */
                 const nat = form.nationality.value.trim();
                 if (!nat) { showErr('nationality', 'Obywatelstwo jest wymagane.'); ok = false; }
                 else clearErr('nationality');
-
-                /* PESEL */
                 const pesel = form.pesel.value.trim();
                 if (!pesel) { showErr('pesel', 'PESEL jest wymagany.'); ok = false; }
                 else if (!/^\d{11}$/.test(pesel)) { showErr('pesel', 'PESEL musi mieć dokładnie 11 cyfr.'); ok = false; }
                 else if (!peselValid(pesel)) { showErr('pesel', 'PESEL jest niepoprawny (błędna suma kontrolna).'); ok = false; }
                 else clearErr('pesel');
-
-                /* Telefon */
                 const phone = form.phone.value.replace(/\s/g, '');
                 if (!phone) { showErr('phone', 'Telefon jest wymagany.'); ok = false; }
                 else if (!/^(\+?\d{9,15})$/.test(phone)) { showErr('phone', 'Podaj poprawny numer telefonu (9–15 cyfr).'); ok = false; }
                 else clearErr('phone');
-
-                /* Email */
                 const email = form.email.value.trim();
                 if (!email) { showErr('email', 'Adres e‑mail jest wymagany.'); ok = false; }
                 else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { showErr('email', 'Podaj poprawny adres e‑mail.'); ok = false; }
                 else clearErr('email');
-
-                /* Kraj */
                 const country = form.country.value.trim();
                 if (!country) { showErr('country', 'Kraj docelowy jest wymagany.'); ok = false; }
                 else clearErr('country');
-
-                /* Miejscowość */
                 const city = form.city.value.trim();
                 if (!city) { showErr('city', 'Miejscowość jest wymagana.'); ok = false; }
                 else clearErr('city');
-
-                /* Daty podróży */
                 const startVal = form.startDate.value;
                 const endVal = form.endDate.value;
                 if (!startVal) { showErr('startDate', 'Data rozpoczęcia jest wymagana.'); ok = false; }
@@ -482,16 +443,10 @@
                         showErr('endDate', 'Data zakończenia musi być późniejsza niż data rozpoczęcia.'); ok = false;
                     } else clearErr('endDate');
                 }
-
-                /* Liczba dni */
                 if (!form.stayLength.value) { showErr('stayLength', 'Wybierz liczbę dni pobytu.'); ok = false; }
                 else clearErr('stayLength');
-
-                /* Cel podróży */
                 if (!form.purpose.value) { showErr('purpose', 'Wybierz cel podróży.'); ok = false; }
                 else clearErr('purpose');
-
-                /* Zakwaterowanie */
                 if (!form.accommodationType.value) { showErr('accommodationType', 'Wybierz rodzaj zakwaterowania.'); ok = false; }
                 else clearErr('accommodationType');
 
@@ -507,8 +462,6 @@
 
                 if (!form.roomPreference.value) { showErr('roomPreference', 'Wybierz preferencje pokoju.'); ok = false; }
                 else clearErr('roomPreference');
-
-                /* Transport */
                 if (!form.transportMode.value) { showErr('transportMode', 'Wybierz środek transportu.'); ok = false; }
                 else clearErr('transportMode');
 
@@ -517,24 +470,16 @@
 
                 if (!form.returnPlace.value.trim()) { showErr('returnPlace', 'Miejsce powrotu jest wymagane.'); ok = false; }
                 else clearErr('returnPlace');
-
-                /* Język */
                 if (!form.language.value.trim()) { showErr('language', 'Język komunikacji jest wymagany.'); ok = false; }
                 else clearErr('language');
-
-                /* Zgoda RODO */
                 if (!form.privacy.checked) { showErr('privacy', 'Zgoda na przetwarzanie danych jest wymagana.'); ok = false; }
                 else clearErr('privacy');
 
                 return ok;
             }
-
-            /* Live-walidacja pojedynczego pola po jego edycji */
             form.addEventListener('input', function (e) {
                 const id = e.target.id;
                 if (!id) return;
-                // Szybka re-walidacja: wywołaj full validate ale pokaż tylko bieżące pole
-                // (Prościej: usuń błąd gdy pole ma wartość, pełna walidacja przy submit)
                 const el = form[e.target.name];
                 if (!el) return;
                 if (e.target.value.trim() || e.target.checked) {
@@ -546,8 +491,6 @@
                     }
                 }
             });
-
-            /* Obsługa submit */
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
                 clearAll();
